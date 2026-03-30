@@ -8,18 +8,12 @@ jobs:
   push_data:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch UltraNX
+      - name: Fetch and Push
         run: |
+          # ดึงข้อมูล
           DATA=$(curl -sL "https://tinfoil.ultranx.ru/tinfoil/index.json")
-          curl -X POST "http://footbrake.neozteon.site/update.php" \
-            --data-urlencode "key=TATX_SECRET_2026" \
-            --data-urlencode "target=ultra" \
-            --data-urlencode "json_data=$DATA"
-
-      - name: Fetch Ghost
-        run: |
-          DATA=$(curl -sL "https://nx.ghostland.at/index.json")
-          curl -X POST "http://footbrake.neozteon.site/update.php" \
+          # ส่งไปที่โดเมนหลัก (เพื่อเลี่ยงปัญหา DNS ของ Subdomain)
+          curl -X POST "http://neozteon.site/update.php" \
             --data-urlencode "key=TATX_SECRET_2026" \
             --data-urlencode "target=ultra" \
             --data-urlencode "json_data=$DATA"
