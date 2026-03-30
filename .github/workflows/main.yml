@@ -1,26 +1,25 @@
 name: TATX Auto Push
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *' 
-  workflow_dispatch: 
+    - cron: '0 */6 * * *'
+
 jobs:
-  push:
+  push_data:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch and Push
+      - name: Fetch UltraNX
         run: |
-          # 1. ดึงข้อมูลจาก UltraNX
-          ULTRA=$(curl -sL https://tinfoil.ultranx.ru/tinfoil/index.json)
-          # 2. ส่งไปที่เลข IP ตรงๆ (เข้าทาง User neozteon)
-          curl -X POST http://203.151.136.31/~neozteon/update.php \
-            -d "key=TATX_SECRET_2026" \
-            -d "target=ultra" \
-            --data-urlencode "json_data=$ULTRA"
-          
-          # 3. ดึงข้อมูลจาก Ghost
-          GHOST=$(curl -sL https://nx.ghostland.at/index.json)
-          # 4. ส่งไปที่เลข IP ตรงๆ
-          curl -X POST http://203.151.136.31/~neozteon/update.php \
-            -d "key=TATX_SECRET_2026" \
-            -d "target=ghost" \
-            --data-urlencode "json_data=$GHOST"
+          DATA=$(curl -sL "https://tinfoil.ultranx.ru/tinfoil/index.json")
+          curl -X POST "http://footbrake.neozteon.site/update.php" \
+            --data-urlencode "key=TATX_SECRET_2026" \
+            --data-urlencode "target=ultra" \
+            --data-urlencode "json_data=$DATA"
+
+      - name: Fetch Ghost
+        run: |
+          DATA=$(curl -sL "https://nx.ghostland.at/index.json")
+          curl -X POST "http://footbrake.neozteon.site/update.php" \
+            --data-urlencode "key=TATX_SECRET_2026" \
+            --data-urlencode "target=ultra" \
+            --data-urlencode "json_data=$DATA"
