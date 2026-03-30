@@ -1,0 +1,20 @@
+name: TATX Auto Push
+on:
+  schedule:
+    - cron: '0 */6 * * *' # รันออโต้ทุก 6 ชม.
+  workflow_dispatch: # กดรันเองได้
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch and Push
+        run: |
+          # ดึงข้อมูลจาก UltraNX และส่งไปโฮสต์น้อง
+          ULTRA=$(curl -sL https://tinfoil.ultranx.ru/tinfoil/index.json)
+          curl -X POST https://footbrake.neozteon.site/update.php \
+            -d "key=TATX_SECRET_2026" -d "target=ultra" --data-urlencode "json_data=$ULTRA"
+          
+          # ดึงข้อมูลจาก Ghost และส่งไปโฮสต์น้อง
+          GHOST=$(curl -sL https://nx.ghostland.at/index.json)
+          curl -X POST https://footbrake.neozteon.site/update.php \
+            -d "key=TATX_SECRET_2026" -d "target=ghost" --data-urlencode "json_data=$GHOST"
